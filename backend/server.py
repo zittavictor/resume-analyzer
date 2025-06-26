@@ -160,7 +160,7 @@ Resume Content:
         # Parse the AI response
         try:
             # Extract JSON from response
-            response_text = response.text
+            response_text = response if isinstance(response, str) else response.text
             if "```json" in response_text:
                 json_start = response_text.find("```json") + 7
                 json_end = response_text.find("```", json_start)
