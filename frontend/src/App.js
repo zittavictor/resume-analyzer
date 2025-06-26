@@ -1,51 +1,139 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
+
+// Components
+import Dashboard from "./components/Dashboard";
+import ResumeEditor from "./components/ResumeEditor";
+import CoverLetterGenerator from "./components/CoverLetterGenerator";
+import ResumeUploader from "./components/ResumeUploader";
+import Navigation from "./components/Navigation";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
+// Sample user ID for demo purposes
+const DEMO_USER_ID = "demo-user-123";
+
+function App() {
+  const [currentUser] = useState(DEMO_USER_ID);
+  const [userResumes, setUserResumes] = useState([]);
+  const [selectedResume, setSelectedResume] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user's resumes on app load
+  useEffect(() => {
+    fetchUserResumes();
+  }, []);
+
+  const fetchUserResumes = async () => {
     try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      setLoading(true);
+      const response = await axios.get(`${API}/user/${currentUser}/resumes`);
+      setUserResumes(response.data);
+      
+      // If user has resumes, select the first one
+      if (response.data.length > 0) {
+        setSelectedResume(response.data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching user resumes:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  const handleResumeSelect = (resume) => {
+    setSelectedResume(resume);
+  };
+
+  const handleResumeUpdate = async () => {
+    // Refresh the resume list when a resume is updated
+    await fetchUserResumes();
+  };
+
+  const handleNewResume = async (resumeData) => {
+    try {
+      const response = await axios.post(`${API}/resume`, {
+        ...resumeData,
+        user_id: currentUser
+      });
+      
+      setUserResumes(prev => [...prev, response.data]);
+      setSelectedResume(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating resume:", error);
+      throw error;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your resumes...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
-
-function App() {
-  return (
-    <div className="App">
+    <div className="min-h-screen bg-gray-50">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
+        <Navigation 
+          userResumes={userResumes}
+          selectedResume={selectedResume}
+          onResumeSelect={handleResumeSelect}
+          onNewResume={handleNewResume}
+        />
+        
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            
+            <Route 
+              path="/dashboard" 
+              element={
+                <Dashboard 
+                  selectedResume={selectedResume}
+                  onResumeUpdate={handleResumeUpdate}
+                />
+              } 
+            />
+            
+            <Route 
+              path="/editor" 
+              element={
+                <ResumeEditor 
+                  selectedResume={selectedResume}
+                  onResumeUpdate={handleResumeUpdate}
+                />
+              } 
+            />
+            
+            <Route 
+              path="/cover-letter" 
+              element={
+                <CoverLetterGenerator 
+                  selectedResume={selectedResume}
+                />
+              } 
+            />
+            
+            <Route 
+              path="/upload" 
+              element={
+                <ResumeUploader 
+                  currentUser={currentUser}
+                  onResumeUploaded={fetchUserResumes}
+                />
+              } 
+            />
+          </Routes>
+        </main>
       </BrowserRouter>
     </div>
   );
