@@ -237,6 +237,7 @@ test_plan:
     - "Setup AI integration with Gemini for resume analysis"
     - "Create resume data models and database schemas"
     - "Implement resume analysis and scoring endpoints"
+    - "Create cover letter generation endpoint"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -244,3 +245,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Starting resume builder application development. User provided Gemini API key for AI integration. Will begin with backend implementation of core features."
+  - agent: "testing"
+    message: "Completed comprehensive testing of all backend API endpoints. Fixed an issue with the AI integration where the emergentintegrations library was returning string responses instead of objects with a 'text' attribute. Modified the code to handle both cases. All backend endpoints are now working correctly, including resume CRUD operations, AI-powered analysis, and cover letter generation."
