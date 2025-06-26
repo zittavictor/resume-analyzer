@@ -234,7 +234,7 @@ Generate a complete cover letter that effectively matches the candidate's backgr
 """
 
         response = await chat.send_message(UserMessage(text=cover_letter_prompt))
-        return response.text
+        return response if isinstance(response, str) else response.text
     except Exception as e:
         logging.error(f"Error generating cover letter: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error generating cover letter: {str(e)}")
