@@ -244,7 +244,7 @@ def test_create_resume():
 def test_get_resume():
     """Test 3: Retrieve the created resume"""
     try:
-        if not hasattr(test_get_resume, "resume_id"):
+        if not created_resume_id:
             print("❌ No resume ID available for retrieval")
             return False
             
