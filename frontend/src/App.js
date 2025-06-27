@@ -8,6 +8,9 @@ import Dashboard from "./components/Dashboard";
 import ResumeEditor from "./components/ResumeEditor";
 import CoverLetterGenerator from "./components/CoverLetterGenerator";
 import ResumeUploader from "./components/ResumeUploader";
+import JobSearch from "./components/JobSearch";
+import ApplicationTracker from "./components/ApplicationTracker";
+import ColdEmailCampaigns from "./components/ColdEmailCampaigns";
 import Navigation from "./components/Navigation";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -67,6 +70,11 @@ function App() {
       console.error("Error creating resume:", error);
       throw error;
     }
+  };
+
+  const handleJobApplication = (applications) => {
+    // Handle job applications success
+    console.log("Job applications submitted:", applications);
   };
 
   if (loading) {
@@ -129,6 +137,34 @@ function App() {
                 <ResumeUploader 
                   currentUser={currentUser}
                   onResumeUploaded={fetchUserResumes}
+                />
+              } 
+            />
+
+            <Route 
+              path="/job-search" 
+              element={
+                <JobSearch 
+                  selectedResume={selectedResume}
+                  onJobApplication={handleJobApplication}
+                />
+              } 
+            />
+
+            <Route 
+              path="/applications" 
+              element={
+                <ApplicationTracker 
+                  currentUser={currentUser}
+                />
+              } 
+            />
+
+            <Route 
+              path="/cold-emails" 
+              element={
+                <ColdEmailCampaigns 
+                  currentUser={currentUser}
                 />
               } 
             />
