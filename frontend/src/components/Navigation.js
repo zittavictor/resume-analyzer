@@ -5,6 +5,7 @@ const Navigation = ({ userResumes, selectedResume, onResumeSelect, onNewResume }
   const location = useLocation();
   const [showResumeDropdown, setShowResumeDropdown] = useState(false);
   const [showNewResumeModal, setShowNewResumeModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [newResumeName, setNewResumeName] = useState("");
 
   const isActive = (path) => location.pathname === path;
