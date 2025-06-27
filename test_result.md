@@ -261,3 +261,5 @@ agent_communication:
     message: "Backend implementation completed successfully. All API endpoints implemented and tested. AI integration working properly with Gemini for resume analysis and cover letter generation."
   - agent: "main"
     message: "Frontend implementation completed. Built comprehensive React application with Dashboard, Resume Editor, Cover Letter Generator, and Resume Uploader components. Ready for end-to-end testing."
+  - agent: "main"
+    message: "Fixed missing litellm dependency issue that was preventing backend from starting. Verified API keys for Resend and Adzuna are correctly configured. Backend now running successfully. Need to test all integrations to ensure they're working properly."
