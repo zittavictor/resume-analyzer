@@ -50,7 +50,7 @@ const Navigation = ({ userResumes, selectedResume, onResumeSelect, onNewResume }
               </Link>
             </div>
 
-            {/* Navigation Links */}
+            {/* Navigation Links - Desktop */}
             <div className="hidden md:flex items-center space-x-6">
               <Link
                 to="/dashboard"
@@ -128,6 +128,72 @@ const Navigation = ({ userResumes, selectedResume, onResumeSelect, onNewResume }
               >
                 Cold Emails
               </Link>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center space-x-4">
+              {/* Resume Selector for Mobile */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowResumeDropdown(!showResumeDropdown)}
+                  className="bg-white border border-gray-300 rounded-md px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {selectedResume?.personal_info?.name?.split(' ')[0] || "Resume"}
+                  <svg className="ml-1 h-3 w-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showResumeDropdown && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <div className="py-1">
+                      {userResumes.map((resume) => (
+                        <button
+                          key={resume.id}
+                          onClick={() => {
+                            onResumeSelect(resume);
+                            setShowResumeDropdown(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                            selectedResume?.id === resume.id ? "bg-blue-50 text-blue-700" : "text-gray-700"
+                          }`}
+                        >
+                          {resume.personal_info?.name || "Unnamed Resume"}
+                          <div className="text-xs text-gray-500">
+                            Updated {new Date(resume.updated_at).toLocaleDateString()}
+                          </div>
+                        </button>
+                      ))}
+                      
+                      <hr className="my-1" />
+                      
+                      <button
+                        onClick={() => {
+                          setShowNewResumeModal(true);
+                          setShowResumeDropdown(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
+                      >
+                        + Create New Resume
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Hamburger menu button */}
+              <button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600 p-2"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {showMobileMenu ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
             </div>
 
             {/* Resume Selector */}
