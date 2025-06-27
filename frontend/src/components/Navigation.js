@@ -250,6 +250,97 @@ const Navigation = ({ userResumes, selectedResume, onResumeSelect, onNewResume }
         </div>
       </nav>
 
+      {/* Mobile Navigation Menu */}
+      {showMobileMenu && (
+        <div className="md:hidden bg-white border-b border-gray-200 shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <Link
+              to="/dashboard"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/dashboard")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              📊 Dashboard
+            </Link>
+            
+            <Link
+              to="/editor"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/editor")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              ✏️ Resume Editor
+            </Link>
+            
+            <Link
+              to="/cover-letter"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/cover-letter")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              📝 Cover Letter
+            </Link>
+            
+            <Link
+              to="/upload"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/upload")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              📤 Upload Resume
+            </Link>
+            
+            <Link
+              to="/job-search"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/job-search")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              🔍 Job Search
+            </Link>
+            
+            <Link
+              to="/applications"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/applications")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              📋 Applications
+            </Link>
+            
+            <Link
+              to="/cold-emails"
+              onClick={() => setShowMobileMenu(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                isActive("/cold-emails")
+                  ? "bg-blue-100 text-blue-700"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              📧 Cold Emails
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* New Resume Modal */}
       {showNewResumeModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
