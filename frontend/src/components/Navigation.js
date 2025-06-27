@@ -196,8 +196,8 @@ const Navigation = ({ userResumes, selectedResume, onResumeSelect, onNewResume }
               </button>
             </div>
 
-            {/* Resume Selector */}
-            <div className="flex items-center space-x-4">
+            {/* Resume Selector - Desktop Only */}
+            <div className="hidden md:flex items-center space-x-4">
               <div className="relative">
                 <button
                   onClick={() => setShowResumeDropdown(!showResumeDropdown)}
