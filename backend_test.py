@@ -381,6 +381,160 @@ def test_get_user_resumes():
         print(f"❌ Error retrieving user resumes: {str(e)}")
         return False
 
+def test_job_search():
+    """Test 9: Search for jobs using Adzuna API"""
+    try:
+        search_data = {
+            "keywords": "Data Scientist",
+            "location": "San Francisco",
+            "limit": 5
+        }
+        
+        response = requests.post(
+            f"{API_URL}/jobs/search",
+            json=search_data
+        )
+        print_response(response)
+        
+        if (response.status_code == 200 and 
+            "jobs" in response.json() and 
+            isinstance(response.json()["jobs"], list) and
+            "count" in response.json()):
+            
+            job_count = response.json()["count"]
+            print(f"✅ Job search successful, found {job_count} jobs")
+            
+            # Print sample job details
+            if job_count > 0:
+                sample_job = response.json()["jobs"][0]
+                print(f"Sample Job: {sample_job['title']} at {sample_job['company']}")
+                
+            return True
+        else:
+            print("❌ Job search failed")
+            return False
+    except Exception as e:
+        print(f"❌ Error searching jobs: {str(e)}")
+        return False
+
+def test_get_recent_jobs():
+    """Test 10: Get recently saved jobs"""
+    try:
+        response = requests.get(f"{API_URL}/jobs/recent?limit=5")
+        print_response(response)
+        
+        if (response.status_code == 200 and 
+            isinstance(response.json(), list)):
+            
+            job_count = len(response.json())
+            print(f"✅ Retrieved {job_count} recent jobs")
+            return True
+        else:
+            print("❌ Recent jobs retrieval failed")
+            return False
+    except Exception as e:
+        print(f"❌ Error retrieving recent jobs: {str(e)}")
+        return False
+
+def test_job_application():
+    """Test 11: Apply to a job"""
+    try:
+        # First, search for jobs to get job IDs
+        search_data = {
+            "keywords": "Data Analyst",
+            "location": "Remote",
+            "limit": 1
+        }
+        
+        search_response = requests.post(
+            f"{API_URL}/jobs/search",
+            json=search_data
+        )
+        
+        if search_response.status_code != 200 or "jobs" not in search_response.json() or len(search_response.json()["jobs"]) == 0:
+            print("❌ Could not find jobs to apply to")
+            return False
+            
+        job_id = search_response.json()["jobs"][0]["id"]
+        
+        # Now apply to the job
+        application_data = {
+            "user_id": TEST_USER_ID,
+            "resume_id": created_resume_id,
+            "job_ids": [job_id],
+            "send_emails": False  # Set to False to avoid sending actual emails during testing
+        }
+        
+        response = requests.post(
+            f"{API_URL}/jobs/apply",
+            json=application_data
+        )
+        print_response(response)
+        
+        if (response.status_code == 200 and 
+            "applications" in response.json() and 
+            isinstance(response.json()["applications"], list) and
+            len(response.json()["applications"]) > 0):
+            
+            print(f"✅ Job application successful")
+            return True
+        else:
+            print("❌ Job application failed")
+            return False
+    except Exception as e:
+        print(f"❌ Error applying to job: {str(e)}")
+        return False
+
+def test_email_sending():
+    """Test 12: Test email sending functionality (without actually sending emails)"""
+    try:
+        # Create a company contact for testing
+        contact_data = {
+            "company_name": "Test Company",
+            "email_addresses": ["test@example.com"],
+            "contact_person": "HR Manager",
+            "department": "Human Resources"
+        }
+        
+        contact_response = requests.post(
+            f"{API_URL}/companies/contacts",
+            json=contact_data
+        )
+        
+        if contact_response.status_code != 200:
+            print("❌ Could not create test company contact")
+            print_response(contact_response)
+            return False
+            
+        # Create an email campaign (without sending)
+        campaign_data = {
+            "user_id": TEST_USER_ID,
+            "campaign_name": "Test Campaign",
+            "email_subject": "Test Subject",
+            "email_template": "This is a test email template for API testing purposes.",
+            "target_companies": ["Test Company"]
+        }
+        
+        response = requests.post(
+            f"{API_URL}/email/campaign",
+            json=campaign_data
+        )
+        print_response(response)
+        
+        if (response.status_code == 200 and 
+            "id" in response.json() and
+            "campaign_name" in response.json() and
+            response.json()["campaign_name"] == "Test Campaign"):
+            
+            print(f"✅ Email campaign creation successful")
+            return True
+        else:
+            print("❌ Email campaign creation failed")
+            return False
+    except Exception as e:
+        print(f"❌ Error testing email functionality: {str(e)}")
+        return False
+
 def run_all_tests():
     """Run all tests in sequence"""
     print("\n" + "="*80)
@@ -401,6 +555,10 @@ def run_all_tests():
     run_test("Get Resume Analysis", test_get_resume_analysis)
     run_test("Generate Cover Letter", test_generate_cover_letter)
     run_test("Get User Resumes", test_get_user_resumes)
+    run_test("Job Search (Adzuna API)", test_job_search)
+    run_test("Get Recent Jobs", test_get_recent_jobs)
+    run_test("Job Application", test_job_application)
+    run_test("Email Functionality (Resend API)", test_email_sending)
     
     # Print summary
     print("\n" + "="*80)
