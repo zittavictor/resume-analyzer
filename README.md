@@ -198,10 +198,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Google Gemini AI for advanced language processing
@@ -210,10 +206,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - TailwindCSS for beautiful, responsive design
 - FastAPI for high-performance backend framework
 
-## 📞 Support
-
-For support, email support@resumebuilder.com or join our community on Discord.
-
----
-
-**Made with ❤️ by developers, for job seekers everywhere.**
